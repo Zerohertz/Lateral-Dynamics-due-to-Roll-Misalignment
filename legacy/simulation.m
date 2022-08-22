@@ -40,5 +40,4 @@ theL = 4.167
 
 %%
 
-
 visualMisalign(sims, tit, theL, I, La, Lb, W, 20)
