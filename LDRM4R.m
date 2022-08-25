@@ -123,14 +123,15 @@ classdef LDRM4R < handle
         function obj = plotRoll(obj, MD, rollName, theL)
             AA = MD;
             BB = obj.w/2;
-            lor = (obj.La + obj.Lb + obj.Lc)/12;
-            loh = obj.w*1.2;
+            lor = (obj.La + obj.Lb + obj.Lc)/15;
+            loh = obj.w*1.5;
             roll = polyshape([AA - lor / 2 AA - lor / 2 AA + lor / 2 AA + lor / 2], [BB - loh / 2 BB + loh / 2 BB + loh / 2 BB - loh / 2]);
             roll = rotate(roll, theL, [AA BB]);
             plot(roll, 'FaceColor', '#dddddd', 'FaceAlpha', 1);
             [xc,yc] = centroid(roll);
-            p = text(xc, yc, sprintf(rollName, xc, yc), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'black', 'FontSize', 14);
-            set(p, 'Rotation', 90 + theL)
+            p = text(xc, yc + obj.w, sprintf(rollName, xc, yc), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'black', 'FontSize', 18);
+%             p = text(xc, yc, sprintf(rollName, xc, yc), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'black', 'FontSize', 14);
+%             set(p, 'Rotation', -90 + theL)
         end
     end
 end
