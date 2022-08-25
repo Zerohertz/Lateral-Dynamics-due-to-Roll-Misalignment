@@ -24,10 +24,7 @@ classdef LDRM4R < handle
     end
     methods (Access = public)
         function obj = LDRM4R()
-            obj.I = 1/12*(obj.h*obj.w^3);
-            obj.k = sqrt(obj.T/(obj.E*obj.I));
-            obj.F1 = 2*obj.T*sin(((obj.a1)/180*pi)/2);
-            obj.F2 = 2*obj.T*sin(((obj.a2)/180*pi)/2);
+            obj.UpdateBC();
         end
         function obj = ChangeBC_E(obj, E)
             obj.E = E;
