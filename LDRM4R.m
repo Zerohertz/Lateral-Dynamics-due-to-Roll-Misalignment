@@ -88,7 +88,29 @@ classdef LDRM4R < handle
             obj.sol = bvp5c(@(x,y,r) bvpfcn(x,y,r), @bcfcn, solinit);
         end
         function obj = plotLD(obj)
-            plot(obj.sol.x, obj.sol.y(1,:))
+            fig = figure
+            set(gcf, 'Color', 'white')
+            set(fig, 'Position', [0 100 1800 1200])
+            x = obj.sol.y(1,:);
+            y = obj.sol.x;
+            W = obj.w; % Web width
+            p1 = plot(y, x, 'Color', 'black');
+            hold on
+            p2 = plot(y, x + W, 'Color', 'black');
+            y_1 = [y; x];
+            y_2 = [y; x + W];
+            yzz = [y_1 flip(y_2,2)];
+            p3 = fill(yzz(1,:), yzz(2,:), 'black', 'FaceAlpha', .5);
+            xlabel("MD [m]")
+            ylabel("CMD [m]")
+            grid on
+            axis equal
+            xlim([-(obj.La + obj.Lb + obj.Lc)/10 obj.La + obj.Lb + obj.Lc + (obj.La + obj.Lb + obj.Lc)/10])
+            set(gca, 'FontSize', 20)
+            obj.plotRoll(0, "Misaligned Roll", obj.theL1)
+            obj.plotRoll(obj.La, "Idle Roller 1", 0)
+            obj.plotRoll(obj.La + obj.Lb, "Idle Roller 2", 0)
+            obj.plotRoll(obj.La + obj.Lb + obj.Lc, "EPC", obj.theL2)
         end
     end
     methods (Access = private)
@@ -97,6 +119,18 @@ classdef LDRM4R < handle
             obj.k = sqrt(obj.T/(obj.E*obj.I));
             obj.F1 = 2*obj.T*sin(((obj.a1)/180*pi)/2);
             obj.F2 = 2*obj.T*sin(((obj.a2)/180*pi)/2);
+        end
+        function obj = plotRoll(obj, MD, rollName, theL)
+            AA = MD;
+            BB = obj.w/2;
+            lor = (obj.La + obj.Lb + obj.Lc)/12;
+            loh = obj.w*1.2;
+            roll = polyshape([AA - lor / 2 AA - lor / 2 AA + lor / 2 AA + lor / 2], [BB - loh / 2 BB + loh / 2 BB + loh / 2 BB - loh / 2]);
+            roll = rotate(roll, theL, [AA BB]);
+            plot(roll, 'FaceColor', '#dddddd', 'FaceAlpha', 1);
+            [xc,yc] = centroid(roll);
+            p = text(xc, yc, sprintf(rollName, xc, yc), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'black', 'FontSize', 14);
+            set(p, 'Rotation', 90 + theL)
         end
     end
 end
