@@ -5,4 +5,4 @@
 > Boundary conditions according to slip condition of 4 rolls
 ![Boundary conditions according to slip condition of 4 rolls](https://user-images.githubusercontent.com/42334717/185857702-63147aeb-e2a2-47d6-a96f-94107b3db1b3.png)
 > Results
-![Results](https://user-images.githubusercontent.com/42334717/186820478-f55b3b3d-c023-4bd4-b3e4-e5d58293e9a4.png)
+![Results](https://user-images.githubusercontent.com/42334717/186820583-b338e8f7-a303-48da-ac4b-19fe027dfaed.png)
