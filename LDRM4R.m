@@ -76,10 +76,14 @@ classdef LDRM4R < handle
             k = obj.k;
             E = obj.E;
             I = obj.I;
+            mr1 = obj.w * obj.mur * obj.F1 / 4; % Moment transfer on idle roller 1
+            mr2 = obj.w * obj.mur * obj.F2 / 4; % Moment transfer on idle roller 2
+            nr1 = obj.mul * obj.F1; % Shear transfer on idle roller 1
+            nr2 = obj.mul * obj.F2; % Shear transfer on idle roller 2
             theL1 = obj.theL1 / 180 * pi;
             theL2 = obj.theL2 / 180 * pi;
             status = obj.status;
-            save("SpanInfo.mat", "k", "E", "I", "theL1", "theL2", "status")
+            save("SpanInfo.mat", "k", "E", "I", "mr1", "mr2", "nr1", "nr2", "theL1", "theL2", "status")
             xmesh_1 = 0:dL:obj.La;
             xmesh_2 = obj.La:dL:obj.La + obj.Lb;
             xmesh_3 = obj.La + obj.Lb:dL:obj.La + obj.Lb + obj.Lc;
@@ -88,7 +92,7 @@ classdef LDRM4R < handle
             obj.sol = bvp5c(@(x,y,r) bvpfcn(x,y,r), @bcfcn, solinit);
         end
         function obj = plotLD(obj)
-            fig = figure
+            fig = figure;
             set(gcf, 'Color', 'white')
             set(fig, 'Position', [0 100 1800 1200])
             x = obj.sol.y(1,:);
@@ -111,6 +115,7 @@ classdef LDRM4R < handle
             obj.plotRoll(obj.La, "Idle Roller 1", 0)
             obj.plotRoll(obj.La + obj.Lb, "Idle Roller 2", 0)
             obj.plotRoll(obj.La + obj.Lb + obj.Lc, "EPC", obj.theL2)
+%             datatip(p1, obj.La + obj.Lb + obj.Lc, 0);
         end
     end
     methods (Access = private)
