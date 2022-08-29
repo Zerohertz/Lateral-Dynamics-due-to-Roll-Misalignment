@@ -115,7 +115,10 @@ classdef LDRM4R < handle
             obj.plotRoll(obj.La, "Idle Roller 1", 0)
             obj.plotRoll(obj.La + obj.Lb, "Idle Roller 2", 0)
             obj.plotRoll(obj.La + obj.Lb + obj.Lc, "EPC", obj.theL2)
-%             datatip(p1, obj.La + obj.Lb + obj.Lc, 0);
+            datatip(p1, obj.La + obj.Lb + obj.Lc, 0);
+        end
+        function maxLD = returnLD(obj)
+            maxLD = obj.sol.y(1, end);
         end
     end
     methods (Access = private)
