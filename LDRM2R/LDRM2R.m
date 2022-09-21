@@ -1,4 +1,4 @@
-classdef LDRM4R < handle
+classdef LDRM2R < handle
     properties (SetAccess = private)
         E = 13120e6; % Elastic modulus [Pa]
         w = 0.542; % Web width [m]
@@ -9,10 +9,8 @@ classdef LDRM4R < handle
         
         T = 40; % Operating tension [N]
         
-        La = 0.5; % Length of section A [m]
-        Lb = 0.5; % Length of section B [m]
-        Lc = 0.5; % Length of section C [m]
-
+        La = 1.5; % Length of section A [m]
+        
         a1 = 90; % Wrap angle of idle roller 1 [deg]
         a2 = 90; % Wrap angle of idle roller 2 [deg]
 
@@ -30,7 +28,7 @@ classdef LDRM4R < handle
         sol; % Solution of LDRM4R
     end
     methods (Access = public)
-        function obj = LDRM4R()
+        function obj = LDRM2R()
             obj.UpdateBC();
         end
         function obj = ChangeBC_E(obj, E)
@@ -55,9 +53,7 @@ classdef LDRM4R < handle
             obj.UpdateBC();
         end
         function obj = ChangeBC_L(obj, L)
-            obj.La = L(1);
-            obj.Lb = L(2);
-            obj.Lc = L(3);
+            obj.La = L;
             obj.UpdateBC();
         end
         function obj = ChangeBC_a(obj, a)
@@ -84,12 +80,9 @@ classdef LDRM4R < handle
             theL2 = obj.theL2 / 180 * pi;
             status = obj.status;
             save("SpanInfo.mat", "k", "E", "I", "mr1", "mr2", "nr1", "nr2", "theL1", "theL2", "status")
-            xmesh_1 = 0:dL:obj.La;
-            xmesh_2 = obj.La:dL:obj.La + obj.Lb;
-            xmesh_3 = obj.La + obj.Lb:dL:obj.La + obj.Lb + obj.Lc;
-            xmesh = [xmesh_1 xmesh_2 xmesh_3];
+            xmesh = 0:dL:obj.La;
             solinit = bvpinit(xmesh, [0; 0; 0; 0]);
-            obj.sol = bvp5c(@(x,y,r) bvpfcn(x,y,r), @bcfcn, solinit);
+            obj.sol = bvp5c(@(x,y) bvpfcn(x,y), @bcfcn, solinit);
         end
         function obj = plotLD(obj)
             fig = figure;
@@ -109,13 +102,13 @@ classdef LDRM4R < handle
             ylabel("CMD [m]")
             grid on
             axis equal
-            xlim([-(obj.La + obj.Lb + obj.Lc)/10 obj.La + obj.Lb + obj.Lc + (obj.La + obj.Lb + obj.Lc)/10])
+            xlim([-(obj.La)/10 obj.La + (obj.La)/10])
             set(gca, 'FontSize', 20)
-            obj.plotRoll(0, "Misaligned Roll", obj.theL1)
-            obj.plotRoll(obj.La, "Idle Roller 1", 0)
-            obj.plotRoll(obj.La + obj.Lb, "Idle Roller 2", 0)
-            obj.plotRoll(obj.La + obj.Lb + obj.Lc, "EPC", obj.theL2)
-            datatip(p1, obj.La + obj.Lb + obj.Lc, 0);
+            obj.plotRoll(0, "Idle Roller 1", obj.theL1)
+%             obj.plotRoll(obj.La, "Idle Roller 1", 0)
+%             obj.plotRoll(obj.La + obj.Lb, "Idle Roller 2", 0)
+            obj.plotRoll(obj.La, "Idle Roller 2", obj.theL2)
+            datatip(p1, obj.La, 0);
         end
         function maxLD = returnLD(obj)
             maxLD = obj.sol.y(1, end);
@@ -131,7 +124,7 @@ classdef LDRM4R < handle
         function obj = plotRoll(obj, MD, rollName, theL)
             AA = MD;
             BB = obj.w/2;
-            lor = (obj.La + obj.Lb + obj.Lc)/15;
+            lor = (obj.La)/15;
             loh = obj.w*1.5;
             roll = polyshape([AA - lor / 2 AA - lor / 2 AA + lor / 2 AA + lor / 2], [BB - loh / 2 BB + loh / 2 BB + loh / 2 BB - loh / 2]);
             roll = rotate(roll, theL, [AA BB]);

@@ -1,13 +1,13 @@
 classdef LDRM4R < handle
     properties (SetAccess = private)
-        E = 2e9; % Elastic modulus [Pa]
-        w = 0.258; % Web width [m]
-        h = 1.2e-5; % Height [m]
+        E = 13120e6; % Elastic modulus [Pa]
+        w = 0.542; % Web width [m]
+        h = 164e-6; % Height [m]
 
         mur = 0.2; % Coefficient of rotational friction between web and roller
         mul = 0.2; % Coefficient of lateral friction between web and roller
         
-        T = 2.7*9.81; % Operating tension [N]
+        T = 40; % Operating tension [N]
         
         La = 0.5; % Length of section A [m]
         Lb = 0.5; % Length of section B [m]
@@ -115,12 +115,39 @@ classdef LDRM4R < handle
             axis equal
             xlim([-(obj.La + obj.Lb + obj.Lc)/10 obj.La + obj.Lb + obj.Lc + (obj.La + obj.Lb + obj.Lc)/10])
             set(gca, 'FontSize', 20)
-            obj.plotRoll(0, "Misaligned Roll", obj.theL1)
-            obj.plotRoll(obj.La, "Idle Roller 1", 0)
-            obj.plotRoll(obj.La + obj.Lb, "Idle Roller 2", 0)
-            obj.plotRoll(obj.La + obj.Lb + obj.Lc, "EPC", obj.theL2)
+            obj.plotRoll(0, "Idle Roller 1", obj.theL1)
+            obj.plotRoll(obj.La, "Idle Roller 2", 0)
+            obj.plotRoll(obj.La + obj.Lb, "Idle Roller 3", 0)
+            obj.plotRoll(obj.La + obj.Lb + obj.Lc, "Tilting Guider", obj.theL2)
             datatip(p1, 0, 0);
             datatip(p1, obj.La + obj.Lb + obj.Lc, 0);
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            fig = figure;
+            set(gcf, 'Color', 'white')
+            set(fig, 'Position', [0 100 1800 500])
+            x = obj.sol.y(1,:);
+            y = obj.sol.x;
+            W = obj.w; % Web width
+            p1 = plot(y, x, 'Color', 'black');
+            hold on
+            p2 = plot(y, x + W, 'Color', 'black');
+            y_1 = [y; x];
+            y_2 = [y; x + W];
+            yzz = [y_1 flip(y_2,2)];
+            p3 = fill(yzz(1,:), yzz(2,:), 'black', 'FaceAlpha', .5);
+            xlabel("MD [m]")
+            ylabel("CMD [m]")
+            grid on
+%             axis equal
+            xlim([-(obj.La + obj.Lb + obj.Lc)/10 obj.La + obj.Lb + obj.Lc + (obj.La + obj.Lb + obj.Lc)/10])
+            set(gca, 'FontSize', 20)
+            obj.plotRoll(0, "Idle Roller 1", obj.theL1)
+            obj.plotRoll(obj.La, "Idle Roller 2", 0)
+            obj.plotRoll(obj.La + obj.Lb, "Idle Roller 3", 0)
+            obj.plotRoll(obj.La + obj.Lb + obj.Lc, "Tilting Guider", obj.theL2)
+%             datatip(p1, 0, 0);
+%             datatip(p1, obj.La + obj.Lb + obj.Lc, 0);
+            ylim([-0.01 0.01])
         end
         function maxLD = returnLD(obj)
             maxLD = obj.sol.y(1, end);
