@@ -118,7 +118,7 @@ classdef LDRM4R < handle
             obj.plotRoll(0, "Idle Roller 1", obj.theL1)
             obj.plotRoll(obj.La, "Idle Roller 2", 0)
             obj.plotRoll(obj.La + obj.Lb, "Idle Roller 3", 0)
-            obj.plotRoll(obj.La + obj.Lb + obj.Lc, "Tilting Guider", obj.theL2)
+            obj.plotRoll(obj.La + obj.Lb + obj.Lc, "Guider Roll", obj.theL2)
             datatip(p1, 0, 0);
             datatip(p1, obj.La + obj.Lb + obj.Lc, 0);
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -144,7 +144,7 @@ classdef LDRM4R < handle
             obj.plotRoll(0, "Idle Roller 1", obj.theL1)
             obj.plotRoll(obj.La, "Idle Roller 2", 0)
             obj.plotRoll(obj.La + obj.Lb, "Idle Roller 3", 0)
-            obj.plotRoll(obj.La + obj.Lb + obj.Lc, "Tilting Guider", obj.theL2)
+            obj.plotRoll(obj.La + obj.Lb + obj.Lc, "Guider Roll", obj.theL2)
 %             datatip(p1, 0, 0);
 %             datatip(p1, obj.La + obj.Lb + obj.Lc, 0);
             ylim([-0.01 0.01])

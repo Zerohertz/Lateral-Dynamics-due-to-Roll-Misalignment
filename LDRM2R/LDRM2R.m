@@ -9,7 +9,7 @@ classdef LDRM2R < handle
         
         T = 40; % Operating tension [N]
         
-        La = 1.5; % Length of section A [m]
+        La = 0.6; % Length of section A [m]
         
         a1 = 90; % Wrap angle of idle roller 1 [deg]
         a2 = 90; % Wrap angle of idle roller 2 [deg]
@@ -24,6 +24,8 @@ classdef LDRM2R < handle
 
         theL1 = 0; % Misaligned angle of misaligned roll
         theL2 = 0; % Misaligned angle of EPC
+        
+        Lat = 0 %7.5e-3
 
         sol; % Solution of LDRM4R
     end
@@ -79,7 +81,8 @@ classdef LDRM2R < handle
             theL1 = obj.theL1 / 180 * pi;
             theL2 = obj.theL2 / 180 * pi;
             status = obj.status;
-            save("SpanInfo.mat", "k", "E", "I", "mr1", "mr2", "nr1", "nr2", "theL1", "theL2", "status")
+            Lat = obj.Lat;
+            save("SpanInfo.mat", "k", "E", "I", "mr1", "mr2", "nr1", "nr2", "theL1", "theL2", "status", "Lat")
             xmesh = 0:dL:obj.La;
             solinit = bvpinit(xmesh, [0; 0; 0; 0]);
             obj.sol = bvp5c(@(x,y) bvpfcn(x,y), @bcfcn, solinit);
@@ -101,13 +104,13 @@ classdef LDRM2R < handle
             xlabel("MD [m]")
             ylabel("CMD [m]")
             grid on
-            axis equal
-            xlim([-(obj.La)/10 obj.La + (obj.La)/10])
+%             axis equal
+            xlim([-(obj.La)/4 obj.La + (obj.La)/4])
             set(gca, 'FontSize', 20)
-            obj.plotRoll(0, "Idle Roller 1", obj.theL1)
+            obj.plotRoll(0, "Guider Roll 1", obj.theL1)
 %             obj.plotRoll(obj.La, "Idle Roller 1", 0)
 %             obj.plotRoll(obj.La + obj.Lb, "Idle Roller 2", 0)
-            obj.plotRoll(obj.La, "Idle Roller 2", obj.theL2)
+            obj.plotRoll(obj.La, "Guider Roll 2", obj.theL2)
             datatip(p1, obj.La, 0);
         end
         function maxLD = returnLD(obj)
@@ -130,7 +133,7 @@ classdef LDRM2R < handle
             roll = rotate(roll, theL, [AA BB]);
             plot(roll, 'FaceColor', '#dddddd', 'FaceAlpha', 1);
             [xc,yc] = centroid(roll);
-            p = text(xc, yc + obj.w, sprintf(rollName, xc, yc), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'black', 'FontSize', 18);
+            p = text(xc, yc + obj.w / 1.2, sprintf(rollName, xc, yc), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'black', 'FontSize', 18);
 %             p = text(xc, yc, sprintf(rollName, xc, yc), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'black', 'FontSize', 14);
 %             set(p, 'Rotation', -90 + theL)
         end
