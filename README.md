@@ -1,3 +1,9 @@
+<h2 align = "center">
+    <a href = "https://zerohertz.github.io/the-lateral-dynamics-of-a-moving-web">
+        <img src="https://img.shields.io/badge/Zerohertz's%20Blog-800a0a?style=for-the-badge&logo=beatsbydre&logoColor=white"/>
+    </a>
+</h2>
+
 # Lateral Dynamics due to Roll Misalignment
 
 > Linearization process of partial differential equation (normal entry law) & boundary conditions according to slip condition of 3 rolls
